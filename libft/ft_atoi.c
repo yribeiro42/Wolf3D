@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/15 11:23:46 by yribeiro          #+#    #+#             */
-/*   Updated: 2016/11/23 14:59:14 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:50:04 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:13:28 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,23 @@
 
 int		ft_atoi(const char *str)
 {
-	int	result;
-	int	negative;
+	int nb;
+	int neg;
 
-	result = 0;
-	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\f'
-			|| *str == '\r' || *str == '\v')
+	neg = -1;
+	while ((*str == '\n') || (*str == '\t') || (*str == '\v') ||
+	(*str == ' ') || (*str == '\f') || (*str == '\r'))
 		str++;
 	if (*str == '-')
-		negative = 1;
+		neg = 1;
 	if (*str == '-' || *str == '+')
 		str++;
-	while (*str && *str <= '9' && *str >= '0')
+	nb = 0;
+	while (*str && ft_isdigit(*str))
 	{
-		result = result * 10 + (*str - '0');
+		nb *= 10;
+		nb -= *str - '0';
 		str++;
 	}
-	if (negative == 1)
-		return (-result);
-	else
-		return (result);
+	return (nb * neg);
 }

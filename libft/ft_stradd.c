@@ -1,20 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   process_pointer.c                                  :+:      :+:    :+:   */
+/*   ft_stradd.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/10/26 15:03:56 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/10/27 19:31:30 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:50:04 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:42:12 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "printf.h"
+#include "libft.h"
 
-int		process_pointer(t_parser *p, va_list **args)
+void	ft_stradd(char **s1, const char *s2)
 {
-	p->length = LL;
-	p->htag = 1;
-	return (process_hex(p, args));
+	char *tmp;
+
+	if (!s1 || !*s1 || !s2)
+		return ;
+	tmp = ft_strjoin(*s1, s2);
+	ft_strdel(s1);
+	*s1 = tmp;
 }

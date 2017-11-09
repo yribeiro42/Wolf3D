@@ -3,32 +3,46 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/14 14:10:44 by yribeiro          #+#    #+#             */
-/*   Updated: 2016/11/23 16:36:40 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:50:04 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:59:54 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_iswhitespace(int c)
+static int			is_blank(char c)
 {
-	return (c == ' ' || c == '\n' || c == '\t');
+	return ((c == ' ') || (c == '\t') || (c == '\n'));
 }
 
-char			*ft_strtrim(char const *s)
+static const char	*count_start(const char *s)
 {
-	int		start;
-	int		end;
+	while (is_blank(*s))
+		s++;
+	return (s);
+}
 
-	if (!s)
+static const char	*count_end(const char *s)
+{
+	if (!*s)
+		return (s);
+	s += ft_strlen(s);
+	while (is_blank(*(s - 1)))
+		s--;
+	return (s);
+}
+
+char				*ft_strtrim(char const *start)
+{
+	char		*ret;
+	const char	*end;
+
+	if (!start)
 		return (NULL);
-	start = 0;
-	end = ft_strlen(s) - 1;
-	while (s[start] && ft_iswhitespace(s[start]))
-		start++;
-	while (s[end] && end > start && ft_iswhitespace(s[end]))
-		end--;
-	return (ft_strsub(s, start, end - start + 1));
+	start = count_start(start);
+	end = count_end(start);
+	ret = ft_strsub(start, 0, (size_t)(end - start));
+	return (ret);
 }

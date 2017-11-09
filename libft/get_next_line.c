@@ -3,77 +3,114 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/03/27 13:24:29 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/10/17 15:15:19 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:55:10 by cblesche          #+#    #+#             */
+/*   Updated: 2017/02/03 14:47:04 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static t_list		*get_next_fd(int fd, t_list **head)
+t_file	*get_file(const int fd, t_file **lst)
 {
-	t_list	*tmp;
+	t_file	*file;
 
-	tmp = *head;
-	while (tmp)
+	file = *lst;
+	while (file)
 	{
-		if ((int)tmp->content_size == fd)
-			return (tmp);
-		tmp = tmp->next;
+		if (file->fd == fd)
+			return (file);
+		file = file->next;
 	}
-	tmp = ft_lstnew("\0", 1);
-	tmp->content_size = fd;
-	ft_lstadd(head, tmp);
-	return (tmp);
+	if (!(file = (t_file*)malloc(sizeof(t_file))))
+		return (NULL);
+	ft_bzero(file->buff, BUFF_SIZE);
+	file->fd = fd;
+	file->pos = 0;
+	file->ret = -1;
+	file->next = *lst;
+	*lst = file;
+	return (file);
 }
 
-static char			*get_next_free(char *content, char *buffer)
+void	delete_file(t_file **lst, t_file *file)
 {
-	char *tmp;
+	t_file	*current;
 
-	tmp = content;
-	content = ft_strjoin(content, buffer);
-	free(tmp);
-	return (content);
+	if (*lst == file)
+	{
+		free(file);
+		*lst = NULL;
+		return ;
+	}
+	current = *lst;
+	while (current)
+	{
+		if (current->next == file)
+		{
+			current->next = file->next;
+			free(file);
+			return ;
+		}
+		current = current->next;
+	}
 }
 
-static char			*get_last_free(char *content, int ret)
+int		fill_line(char **line, t_file *file)
 {
-	char *tmp;
+	size_t	size;
+	char	*end;
+	char	*buff;
+	char	*sub;
 
-	tmp = content;
-	content = ft_strdup(content + ret);
-	free(tmp);
-	return (content);
+	buff = file->buff + file->pos;
+	if (!(end = ft_strchr(buff, '\n')))
+		end = file->buff + file->ret;
+	size = (size_t)(end - buff);
+	if (!(sub = ft_strsub(buff, 0, size)))
+		return (0);
+	ft_stradd(line, sub);
+	if (!*line)
+		return (0);
+	ft_strdel(&sub);
+	file->pos += size;
+	if (*end)
+		file->pos++;
+	return (*end == '\n' ? 1 : 0);
 }
 
-int					get_next_line(int fd, char **line)
+int		fill_buffer(t_file *file)
 {
-	t_list	static	*list;
-	t_list			*head;
-	char			buffer[BUFF_SIZE + 1];
-	int				ret;
+	file->pos = 0;
+	file->ret = read(file->fd, file->buff, BUFF_SIZE);
+	if (file->ret == -1)
+		return (file->ret);
+	file->buff[file->ret] = 0;
+	return (file->ret);
+}
 
-	if (fd < 0 || line == NULL || read(fd, buffer, 0) < 0)
+int		get_next_line(const int fd, char **line)
+{
+	static t_file	*lst = NULL;
+	t_file			*file;
+
+	if (fd < 0 || !line || !(*line = ft_strnew(1)) ||
+		!(file = get_file(fd, &lst)))
 		return (-1);
-	head = list;
-	list = get_next_fd(fd, &head);
-	while ((ret = read(fd, buffer, BUFF_SIZE)))
+	while (file->buff[file->pos] || fill_buffer(file) > 0)
 	{
-		buffer[ret] = '\0';
-		list->content = get_next_free(list->content, buffer);
-		if (ft_strchr(buffer, EOL))
-			break ;
+		if (fill_line(line, file))
+			return (1);
+		if (!*line)
+		{
+			delete_file(&lst, file);
+			return (-1);
+		}
 	}
-	ret = 0;
-	while (((char *)list->content)[ret] != EOL && ((char *)list->content)[ret])
-		ret++;
-	*line = ft_strndup(list->content, ret);
-	if (((char *)list->content)[ret] == EOL)
-		ret++;
-	list->content = get_last_free(list->content, ret);
-	list = head;
-	return (ret ? 1 : 0);
+	if (**line)
+		return (1);
+	ft_strdel(line);
+	delete_file(&lst, file);
+	return (file->ret);
 }

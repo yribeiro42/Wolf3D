@@ -3,36 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/28 20:09:09 by yribeiro          #+#    #+#             */
-/*   Updated: 2016/11/28 20:10:46 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:52:31 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:58:08 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+static	void	*ft_revmemcpy(void *dest, const void *src, size_t n)
 {
-	unsigned char		*tmpdest;
-	unsigned char		*tmpsrc;
-	size_t				i;
+	unsigned char *destcp;
+	unsigned char *srccp;
 
-	tmpdest = (unsigned char*)dest;
-	tmpsrc = (unsigned char*)src;
-	i = 0;
-	if (tmpsrc < tmpdest)
-	{
-		while (n--)
-			tmpdest[n] = tmpsrc[n];
-	}
-	else
-	{
-		while (i < n)
-		{
-			tmpdest[i] = tmpsrc[i];
-			i++;
-		}
-	}
+	destcp = (unsigned char *)dest + n;
+	srccp = (unsigned char *)src + n;
+	while (n--)
+		*--destcp = *--srccp;
 	return (dest);
+}
+
+void			*ft_memmove(void *dest, const void *src, size_t n)
+{
+	if (dest < src)
+		return (ft_memcpy(dest, src, n));
+	else if (dest > src)
+		return (ft_revmemcpy(dest, src, n));
+	return ((void*)dest);
 }

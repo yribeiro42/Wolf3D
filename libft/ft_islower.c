@@ -1,31 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strndup.c                                       :+:      :+:    :+:   */
+/*   ft_islower.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/19 14:12:10 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/04/19 14:15:58 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:51:30 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:15:18 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strndup(char *s, size_t n)
+int		ft_islower(int c)
 {
-	char			*copy;
-	unsigned int	i;
-
-	i = 0;
-	copy = malloc(sizeof(char) * (n + 1));
-	if (!copy)
-		return (NULL);
-	while (i < n)
-	{
-		copy[i] = s[i];
-		i++;
-	}
-	copy[i] = '\0';
-	return (copy);
+	return (c >= 'a' && c <= 'z');
 }

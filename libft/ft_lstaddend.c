@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstaddend.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/28 19:19:35 by yribeiro          #+#    #+#             */
-/*   Updated: 2016/11/28 19:38:01 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/16 12:29:07 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/28 18:58:03 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,18 +14,18 @@
 
 void	ft_lstaddend(t_list **alst, t_list *node)
 {
-	t_list	*new_list;
+	t_list *current;
 
-	if (!alst)
+	if (!alst || !node)
 		return ;
-	new_list = *alst;
-	if (!new_list)
+	current = *alst;
+	if (!current)
 	{
 		ft_lstadd(alst, node);
 		return ;
 	}
-	while (new_list->next)
-		new_list = new_list->next;
-	new_list->next = node;
+	while (current->next)
+		current = current->next;
+	current->next = node;
 	node->next = NULL;
 }

@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnstr.c                                       :+:      :+:    :+:   */
+/*   ft_isupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yribeiro <yribeiro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/28 20:09:09 by yribeiro          #+#    #+#             */
-/*   Updated: 2017/10/27 17:31:10 by yribeiro         ###   ########.fr       */
+/*   Created: 2016/11/09 12:51:43 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 08:15:30 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putnstr(char const *s, int n)
+int		ft_isupper(int c)
 {
-	if (s)
-		write(1, s, n);
+	return (c >= 'A' && c <= 'Z');
 }

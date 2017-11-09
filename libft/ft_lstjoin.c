@@ -1,27 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_lstjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/09 12:52:03 by cblesche          #+#    #+#             */
-/*   Updated: 2016/11/16 10:50:44 by cblesche         ###   ########.fr       */
+/*   Created: 2016/11/16 12:29:07 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/28 18:58:03 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+void	ft_lstjoin(t_list **lst1, t_list *lst2)
 {
-	unsigned char *cp;
+	t_list *current;
 
-	cp = (unsigned char *)s;
-	while (n--)
+	if (!lst1 || !lst2)
+		return ;
+	current = *lst1;
+	if (!current)
 	{
-		if (*cp == (unsigned char)c)
-			return (cp);
-		cp++;
+		*lst1 = lst2;
+		return ;
 	}
-	return (NULL);
+	while (current->next)
+		current = current->next;
+	current->next = lst2;
 }

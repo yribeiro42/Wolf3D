@@ -1,27 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_memchr.c                                        :+:      :+:    :+:   */
+/*   ft_lstgeti.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cblesche <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/09 12:52:03 by cblesche          #+#    #+#             */
-/*   Updated: 2016/11/16 10:50:44 by cblesche         ###   ########.fr       */
+/*   Created: 2016/11/09 12:50:04 by cblesche          #+#    #+#             */
+/*   Updated: 2016/11/16 12:35:18 by cblesche         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memchr(const void *s, int c, size_t n)
+t_list		*ft_lstgeti(t_list *lst, size_t i)
 {
-	unsigned char *cp;
-
-	cp = (unsigned char *)s;
-	while (n--)
-	{
-		if (*cp == (unsigned char)c)
-			return (cp);
-		cp++;
-	}
-	return (NULL);
+	if (!lst || ft_lstsize(lst) <= i)
+		return (NULL);
+	while (i--)
+		lst = lst->next;
+	return (lst);
 }
